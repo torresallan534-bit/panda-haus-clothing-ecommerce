@@ -11,7 +11,7 @@ async function seed() {
   const files = fs.readdirSync(imagesDir)
 
   // 1. Subir todas las imágenes locales a la colección Media de Payload
-  const mediaMap: Record<string, string> = {}
+  const mediaMap: Record<string, any> = {}
 
   for (const filename of files) {
     const filePath = path.join(imagesDir, filename)
@@ -142,11 +142,11 @@ async function seed() {
         sku: prod.sku,
         price: prod.price,
         salePrice: prod.salePrice || null,
-        category: prod.category,
+        category: prod.category as any,
         featured: prod.featured,
         media: {
-          primary: prod.primaryImage,
-          secondary: prod.secondaryImage,
+          primary: prod.primaryImage as any,
+          secondary: prod.secondaryImage as any,
         },
         variations: {
           sizes: prod.sizes.map((size) => ({ size: size as any })),
