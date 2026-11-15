@@ -32,6 +32,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const [selectedSize, setSelectedSize] = useState<string>(sizes[0] || 'M')
   const [isHovered, setIsHovered] = useState(false)
+  const [mainImg, setMainImg] = useState(primaryImage)
+  const [hoverImg, setHoverImg] = useState(secondaryImage)
   const addItem = useCartStore((state) => state.addItem)
 
   const hasDiscount = salePrice && salePrice < price
@@ -68,10 +70,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <Link href={`/productos/${slug}`} className="block w-full h-full">
           {/* Imagen Primaria */}
           <Image
-            src={primaryImage}
+            src={mainImg}
             alt={name}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
+            onError={() => setMainImg(mainImg.replace('.jfif', '.jpg'))}
             className={`object-cover object-center transition-all duration-700 ease-out ${
               isHovered ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
             }`}
@@ -79,10 +82,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
           {/* Imagen Secundaria (Efecto Zara Hover) */}
           <Image
-            src={secondaryImage}
+            src={hoverImg}
             alt={`${name} en detalle`}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
+            onError={() => setHoverImg(hoverImg.replace('.jfif', '.jpg'))}
             className={`object-cover object-center transition-all duration-700 ease-out absolute inset-0 ${
               isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
             }`}
