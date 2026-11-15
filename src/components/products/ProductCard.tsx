@@ -13,7 +13,7 @@ export interface ProductCardProps {
   price: number
   salePrice?: number | null
   primaryImage: string
-  secondaryImage: string
+  secondaryImage?: string | null
   sizes: string[]
   categoryName?: string
 }
@@ -33,12 +33,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const [selectedSize, setSelectedSize] = useState<string>(sizes[0] || 'M')
   const [isHovered, setIsHovered] = useState(false)
   const [mainImg, setMainImg] = useState(primaryImage)
-  const [hoverImg, setHoverImg] = useState(secondaryImage)
   const addItem = useCartStore((state) => state.addItem)
 
   const hasDiscount = salePrice && salePrice < price
   const activePrice = hasDiscount ? salePrice : price
   const discountPercent = hasDiscount ? Math.round(((price - salePrice!) / price) * 100) : 0
+
+  // Solo se activa cambio de imagen si realmente existe una segunda foto del mismo producto
+  const hasDistinctSecondary = secondaryImage && secondaryImage !== primaryImage
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -67,8 +69,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </span>
         )}
 
-        <Link href={`/productos/${slug}`} className="block w-full h-full">
-          {/* Imagen Primaria */}
+        <Link href={`/productos/${slug}`} className="block w-full h-full relative overflow-hidden">
+          {/* Imagen Primaria (Con zoom sutil y elegante en hover) */}
           <Image
             src={mainImg}
             alt={name}
@@ -76,24 +78,29 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             sizes="(max-width: 768px) 50vw, 25vw"
             onError={() => setMainImg(mainImg.replace('.jfif', '.jpg'))}
             className={`object-cover object-center transition-all duration-700 ease-out ${
-              isHovered ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
+              hasDistinctSecondary && isHovered
+                ? 'opacity-0 scale-105'
+                : isHovered
+                ? 'scale-108 brightness-95'
+                : 'opacity-100 scale-100'
             }`}
           />
 
-          {/* Imagen Secundaria (Efecto Zara Hover) */}
-          <Image
-            src={hoverImg}
-            alt={`${name} en detalle`}
-            fill
-            sizes="(max-width: 768px) 50vw, 25vw"
-            onError={() => setHoverImg(hoverImg.replace('.jfif', '.jpg'))}
-            className={`object-cover object-center transition-all duration-700 ease-out absolute inset-0 ${
-              isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-            }`}
-          />
+          {/* Imagen Secundaria opcional */}
+          {hasDistinctSecondary && (
+            <Image
+              src={secondaryImage!}
+              alt={`${name} en detalle`}
+              fill
+              sizes="(max-width: 768px) 50vw, 25vw"
+              className={`object-cover object-center transition-all duration-700 ease-out absolute inset-0 ${
+                isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+              }`}
+            />
+          )}
         </Link>
 
-        {/* Botón Añadir Rápido (Hover en Desktop, Táctil en Móvil) */}
+        {/* Botón Añadir Rápido (Hover en Desktop, siempre listo) */}
         <div className="absolute bottom-0 inset-x-0 p-2 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out md:block">
           <button
             onClick={handleQuickAdd}
