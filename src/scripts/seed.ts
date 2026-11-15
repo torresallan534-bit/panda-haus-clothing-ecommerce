@@ -162,7 +162,7 @@ async function seed() {
     data: {
       general: {
         storeName: 'Panda Haus Studio',
-        whatsappNumber: '573001234567',
+        whatsappNumber: '573248000501',
         whatsappDefaultMessage: '¡Hola Panda Haus! Me interesa ver el catálogo de prendas.',
       },
       announcementBar: {

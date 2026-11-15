@@ -2,10 +2,10 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { WhatsAppButton } from '@/components/whatsapp/WhatsAppButton'
 import { StickyAddToCart } from '@/components/products/StickyAddToCart'
 import { WhatsAppFloatingWidget } from '@/components/whatsapp/WhatsAppFloatingWidget'
-import { ALL_PRODUCTS, ProductItem } from '@/components/products/CatalogSection'
+import { ALL_PRODUCTS } from '@/components/products/CatalogSection'
+import { ProductDetailActions } from '@/components/products/ProductDetailActions'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -19,12 +19,12 @@ export default async function ProductDetailPage({ params }: PageProps) {
     notFound()
   }
 
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '573001234567'
+  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '573248000501'
   const hasDiscount = product.salePrice && product.salePrice < product.price
   const activePrice = hasDiscount ? product.salePrice! : product.price
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white font-sans">
       {/* Migas de Pan (Breadcrumb) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 text-xs text-neutral-400 uppercase tracking-widest flex items-center gap-2">
         <Link href="/" className="hover:text-neutral-900">Inicio</Link>
@@ -60,11 +60,11 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
             <div className="flex items-center gap-3 mb-6">
               <span className="text-xl sm:text-2xl font-semibold text-neutral-900">
-                ${activePrice.toLocaleString('es-CO')}
+                ${activePrice.toLocaleString('es-CO')} COP
               </span>
               {hasDiscount && (
                 <span className="text-base text-neutral-400 line-through">
-                  ${product.price.toLocaleString('es-CO')}
+                  ${product.price.toLocaleString('es-CO')} COP
                 </span>
               )}
             </div>
@@ -73,57 +73,30 @@ export default async function ProductDetailPage({ params }: PageProps) {
               Prenda de alta confección diseñada por Panda Haus Studio. Textura suave, estructura contemporánea y acabados de máxima durabilidad para el uso cotidiano.
             </p>
 
-            {/* Selector de Tallas */}
-            <div className="mb-8">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-xs uppercase tracking-wider font-semibold text-neutral-900">
-                  Selecciona tu talla
-                </span>
-                <span className="text-xs text-neutral-500 underline cursor-pointer">
-                  Guía de tallas
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {product.sizes.map((size: string) => (
-                  <button
-                    key={size}
-                    type="button"
-                    className="border border-neutral-300 hover:border-neutral-900 text-xs font-medium py-2.5 px-4 focus:bg-neutral-950 focus:text-white transition-all"
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* CTAs de Alta Conversión */}
-            <div className="flex flex-col gap-3">
-              <button
-                type="button"
-                className="w-full bg-neutral-950 hover:bg-black text-white text-xs uppercase tracking-widest font-semibold py-4 transition-colors shadow-md"
-              >
-                Añadir al Carrito
-              </button>
-
-              {/* Botón Dinámico de WhatsApp */}
-              <WhatsAppButton
-                phoneNumber={whatsappNumber}
-                productName={product.name}
-                sku={product.sku}
-                price={activePrice}
-              />
-            </div>
+            {/* Acciones de Compra y Selección de Talla (Reactivo con Carrito y WhatsApp) */}
+            <ProductDetailActions
+              id={product.id}
+              name={product.name}
+              price={activePrice}
+              image={product.image}
+              sku={product.sku}
+              sizes={product.sizes}
+              whatsappNumber={whatsappNumber}
+            />
 
             {/* Beneficios Garantizados */}
             <div className="mt-10 border-t border-neutral-200 pt-6 flex flex-col gap-3 text-xs text-neutral-600">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-neutral-900">✓ Envío Express:</span> Despacho en 24-48 horas.
+                <span className="font-semibold text-neutral-900">✓ Envío Express:</span> Despacho nacional en 24-48 horas.
               </div>
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-neutral-900">✓ Cambios Fáciles:</span> 30 días para cambios sin costo.
+                <span className="font-semibold text-neutral-900">✓ Envío Gratis:</span> En compras superiores a $200.000 COP.
               </div>
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-neutral-900">✓ Pago Seguro:</span> Tarjetas, transferencias y contraentrega.
+                <span className="font-semibold text-neutral-900">✓ Cambios Fáciles:</span> 30 días para cambios de talla sin costo.
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-neutral-900">✓ Atención Personalizada:</span> Pedidos confirmados 1 a 1 por WhatsApp.
               </div>
             </div>
           </div>

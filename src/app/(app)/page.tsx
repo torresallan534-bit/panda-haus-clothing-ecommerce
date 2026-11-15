@@ -5,7 +5,7 @@ import { CatalogSection } from '@/components/products/CatalogSection'
 import { WhatsAppFloatingWidget } from '@/components/whatsapp/WhatsAppFloatingWidget'
 
 export default async function HomePage() {
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '573001234567'
+  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '573248000501'
 
   return (
     <main className="min-h-screen bg-white text-neutral-900">

@@ -23,10 +23,10 @@ export const StoreSettings: GlobalConfig = {
           name: 'whatsappNumber',
           type: 'text',
           label: 'Número de WhatsApp (con código de país, sin + ni espacios)',
-          defaultValue: '573001234567',
+          defaultValue: '573248000501',
           required: true,
           admin: {
-            description: 'Ejemplo: 573001234567 para Colombia o 52155... para México.',
+            description: 'Ejemplo: 573248000501 para Colombia.',
           },
         },
         {
